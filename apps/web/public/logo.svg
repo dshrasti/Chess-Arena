@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none">
+  <defs>
+    <linearGradient id="arenaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="ringGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="44" stroke="url(#ringGradient)" stroke-width="4.5" stroke-dasharray="210 20" stroke-linecap="round" />
+  <circle cx="50" cy="50" r="38" stroke="#10B981" stroke-width="1.5" stroke-opacity="0.3" />
+  <path d="M42 22 C46 20, 56 22, 60 28 C64 34, 63 42, 68 47 C72 51, 71 56, 67 56 C63 56, 59 52, 58 50 C58 58, 64 68, 66 74 L34 74 C34 68, 36 60, 38 52 C35 48, 33 42, 35 34 C36 29, 39 25, 42 22 Z" 
+        fill="url(#arenaGradient)" stroke="#0F1117" stroke-width="1.5" stroke-linejoin="round" />
+  <circle cx="51" cy="33" r="2.5" fill="#0F1117" />
+  <path d="M40 38 L45 40" stroke="#0F1117" stroke-width="2" stroke-linecap="round" />
+  <path d="M43 47 L48 48" stroke="#0F1117" stroke-width="2" stroke-linecap="round" />
+  <rect x="30" y="74" width="40" height="6" rx="3" fill="#10B981" />
+</svg>
+

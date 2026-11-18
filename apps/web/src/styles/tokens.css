@@ -1,0 +1,39 @@
+:root {
+  /* Light theme (warm paper tones) */
+  --color-bg: #F8F6F0;
+  --color-card: #FFFFFF;
+  --color-border: #E5E0D8;
+  --color-text: #1C1917;
+  --color-muted: #6B7280;
+  --color-accent: #059669;
+  --color-accent-hover: #047857;
+  --color-accent-subtle: #ECFDF5;
+
+  /* Board theme tokens (Classic Emerald default) */
+  --board-light: #EEEED2;
+  --board-dark: #769656;
+  --board-highlight: rgba(255, 255, 0, 0.45);
+  --board-selected: rgba(20, 85, 30, 0.5);
+  --board-check: radial-gradient(circle, rgba(255, 0, 0, 0.8) 0%, rgba(239, 68, 68, 0.3) 70%, transparent 100%);
+  --board-hint: rgba(59, 130, 246, 0.5);
+
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"], .dark {
+  /* Dark theme (deep ink/charcoal surfaces) */
+  --color-bg: #0F1117;
+  --color-card: #181B24;
+  --color-border: #262B38;
+  --color-text: #F3F4F6;
+  --color-muted: #9CA3AF;
+  --color-accent: #10B981;
+  --color-accent-hover: #34D399;
+  --color-accent-subtle: #064E3B;
+
+  --board-light: #DEE3E6;
+  --board-dark: #8CA2AD;
+}
+

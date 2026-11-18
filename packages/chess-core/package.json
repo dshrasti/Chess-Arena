@@ -1,0 +1,23 @@
+{
+  "name": "@chess-arena/chess-core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "echo \"@chess-arena/chess-core lint ok\""
+  },
+  "dependencies": {
+    "chess.js": "^1.0.0-beta.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}
+
