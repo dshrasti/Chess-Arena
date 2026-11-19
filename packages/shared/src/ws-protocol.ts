@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const ClientMessageType = z.enum([
   'auth',
+  'presence.join',
   'queue.join',
   'queue.leave',
   'room.create',
@@ -26,6 +27,7 @@ export const ClientMessageType = z.enum([
 
 export const ServerMessageType = z.enum([
   'auth.ok',
+  'presence.update',
   'queue.status',
   'room.state',
   'game.start',
@@ -68,6 +70,7 @@ export const ChatSendSchema = z.object({
 
 export const ClientMessageSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('auth'), token: z.string() }),
+  z.object({ type: z.literal('presence.join'), sessionId: z.string(), userId: z.string().optional() }),
   z.object({ type: z.literal('queue.join'), payload: QueueJoinSchema }),
   z.object({ type: z.literal('queue.leave') }),
   z.object({ type: z.literal('room.create'), payload: RoomCreateSchema }),
