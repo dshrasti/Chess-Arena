@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { GameEngine } from '../src/GameEngine';
 import { identifyOpening } from '../src/opening-book';
-import { validateFen } from '../src/fen';
-import { parseUci } from '../src/notation';
 
 describe('Comprehensive Rules & Edge Cases', () => {
   describe('Double Check Mechanics', () => {

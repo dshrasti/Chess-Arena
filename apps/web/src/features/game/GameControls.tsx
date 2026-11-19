@@ -22,6 +22,12 @@ export const GameControls: React.FC = () => {
     toggleSound,
     history,
     currentPly,
+    isEngineThinking,
+    isBotGame,
+    botProfile,
+    botDifficulty,
+    engineEval,
+    setBotDifficulty,
   } = useGameStore();
 
   const [confirmResign, setConfirmResign] = useState(false);
@@ -231,12 +237,55 @@ export const GameControls: React.FC = () => {
       )}
 
       {/* Engine Depth & Live Performance Ticker */}
-      <div className="bg-surface-deep/60 p-2.5 rounded-lg flex items-center justify-between text-[11px] font-label-notation text-outline">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-          <span>Stockfish 16.1 WASM</span>
+      <div className="bg-surface-deep/60 p-2.5 rounded-lg flex flex-col gap-2 text-[11px] font-label-notation text-outline">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isEngineThinking
+                  ? 'bg-primary animate-ping'
+                  : 'bg-secondary'
+              }`}
+            />
+            <span className="font-semibold text-on-surface">
+              {isBotGame
+                ? `Bot: ${botProfile?.name || 'Stockfish 19'}`
+                : 'Stockfish 19 Lite WASM'}
+            </span>
+          </div>
+          <span className="text-secondary font-medium">
+            {isEngineThinking
+              ? 'Thinking...'
+              : engineEval
+              ? `Depth ${engineEval.depth}`
+              : 'NNUE Active'}
+          </span>
         </div>
-        <span className="text-secondary font-medium">6-man Tablebase</span>
+
+        {/* In-Game Difficulty Level Switcher (Easy, Medium, Hard, Expert) */}
+        {isBotGame && (
+          <div className="pt-1.5 border-t border-border-subtle/60 flex items-center justify-between">
+            <span className="text-[10px] text-outline uppercase tracking-wider">Difficulty:</span>
+            <div className="flex items-center gap-1">
+              {(['easy', 'medium', 'hard', 'expert'] as const).map((lvl) => {
+                return (
+                  <button
+                    key={lvl}
+                    type="button"
+                    onClick={() => setBotDifficulty(lvl)}
+                    className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold transition-all ${
+                      botDifficulty === lvl
+                        ? 'bg-secondary text-surface-deep shadow-sm'
+                        : 'bg-surface-elevated text-outline hover:text-on-surface'
+                    }`}
+                  >
+                    {lvl}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

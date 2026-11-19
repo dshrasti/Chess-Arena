@@ -3,8 +3,20 @@ import { useGameStore } from './gameStore';
 import { toFigurine } from '@chess-arena/chess-core';
 
 export const MoveList: React.FC = () => {
-  const { history, currentPly, isAtLive, jumpToPly, first, prev, next, last, engine } =
-    useGameStore();
+  const {
+    history,
+    currentPly,
+    isAtLive,
+    jumpToPly,
+    first,
+    prev,
+    next,
+    last,
+    engine,
+    isBotGame,
+    engineEval,
+    isEngineThinking,
+  } = useGameStore();
   const [useFigurine, setUseFigurine] = useState(false);
   const [copied, setCopied] = useState(false);
   const listEndRef = useRef<HTMLDivElement>(null);
@@ -86,10 +98,16 @@ export const MoveList: React.FC = () => {
             {useFigurine ? '♘ Figurine' : 'SAN'}
           </button>
           <span className="font-label-notation text-[10px] text-outline bg-surface-card px-2 py-0.5 rounded border border-border-subtle">
-            Depth 36/40
+            {isBotGame && isEngineThinking
+              ? 'Thinking...'
+              : isBotGame && engineEval
+              ? `Depth ${engineEval.depth}`
+              : 'SF19 Active'}
           </span>
           <span className="font-label-notation text-[10px] text-mint-bright font-semibold hidden sm:inline">
-            3.8 MNPS
+            {isBotGame && engineEval?.nps
+              ? `${(engineEval.nps / 1000000).toFixed(1)} MNPS`
+              : '3.8 MNPS'}
           </span>
         </div>
       </div>
@@ -126,6 +144,7 @@ export const MoveList: React.FC = () => {
                 {row.turnNumber}.
               </span>
               <button
+                data-ply={row.white.ply}
                 onClick={() => jumpToPly(row.white.ply)}
                 className={`col-span-5 text-left px-1.5 py-0.5 rounded transition-all truncate ${
                   currentPly === row.white.ply
@@ -137,6 +156,7 @@ export const MoveList: React.FC = () => {
               </button>
               {row.black ? (
                 <button
+                  data-ply={row.black!.ply}
                   onClick={() => jumpToPly(row.black!.ply)}
                   className={`col-span-5 text-left px-1.5 py-0.5 rounded transition-all truncate ${
                     currentPly === row.black.ply

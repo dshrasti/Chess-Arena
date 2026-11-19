@@ -15,6 +15,8 @@ export interface PlayerCardProps {
   timeRemaining?: string; // e.g. "03:14" or "00:45.2"
   latencyMs?: number;
   avatarUrl?: string;
+  isThinking?: boolean;
+  isBot?: boolean;
 }
 
 export const PlayerCard: React.FC<PlayerCardProps> = ({
@@ -29,6 +31,8 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   timeRemaining = '05:00',
   latencyMs = 24,
   avatarUrl,
+  isThinking = false,
+  isBot = false,
 }) => {
   const isWhite = color === 'w';
 
@@ -77,6 +81,11 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
             <span className="px-1.5 py-0.5 rounded text-[10px] font-label-notation font-bold uppercase bg-primary/15 text-primary tracking-wider">
               {title}
             </span>
+            {isBot && (
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-label-notation font-extrabold uppercase bg-gold-light/15 text-gold-light border border-gold-light/30">
+                AI BOT
+              </span>
+            )}
             <span
               className={`font-body-md text-sm font-semibold truncate ${
                 isTurn ? 'text-primary' : 'text-on-surface'
@@ -84,10 +93,12 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
             >
               {name}
             </span>
-            <span className="text-[11px] text-outline font-label-notation hidden sm:inline">FIDE</span>
+            <span className="text-[11px] text-outline font-label-notation hidden sm:inline">
+              {isBot ? 'STOCKFISH' : 'FIDE'}
+            </span>
             <span className="hidden sm:flex items-center gap-1 text-[11px] text-secondary font-label-notation pl-1">
               <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
-              {latencyMs}ms
+              {isBot ? 'Local WASM' : `${latencyMs}ms`}
             </span>
           </div>
 
@@ -128,15 +139,34 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
           }`}
         >
           {isTurn && (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-secondary animate-pulse" />
+            <div
+              className={`absolute bottom-0 left-0 right-0 h-1 ${
+                isThinking ? 'bg-primary animate-ping' : 'bg-secondary animate-pulse'
+              }`}
+            />
           )}
           <span
             className={`text-[9px] uppercase font-label-notation tracking-widest flex items-center gap-1 ${
-              isTurn ? 'text-secondary font-semibold' : 'text-outline'
+              isThinking
+                ? 'text-primary font-bold animate-pulse'
+                : isTurn
+                ? 'text-secondary font-semibold'
+                : 'text-outline'
             }`}
           >
-            {isTurn && <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-ping" />}
-            {isTurn ? 'Turn Active' : `${isWhite ? 'White' : 'Black'} • Inactive`}
+            {isThinking ? (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+                Thinking...
+              </>
+            ) : isTurn ? (
+              <>
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-ping" />
+                Turn Active
+              </>
+            ) : (
+              `${isWhite ? 'White' : 'Black'} • Inactive`
+            )}
           </span>
           <div className="flex items-baseline">
             <span

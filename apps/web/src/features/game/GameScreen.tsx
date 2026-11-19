@@ -38,6 +38,12 @@ export const GameScreen: React.FC = () => {
     isFlipped,
     flipBoard,
     history,
+    isBotGame,
+    botColor,
+    botProfile,
+    isEngineThinking,
+    engineEval,
+    startBotGame,
   } = useGameStore();
 
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
@@ -114,19 +120,28 @@ export const GameScreen: React.FC = () => {
       title: bot.title.split(' ')[0] || 'AI',
       rating: bot.elo,
       isBot: true,
-      latencyMs: 5,
+      latencyMs: 1,
     });
-    if ((userColor === 'b' && !isFlipped) || (userColor === 'w' && isFlipped)) {
-      flipBoard();
-    }
     setWhiteTimeMs(300000);
     setBlackTimeMs(300000);
+    startBotGame(bot, userColor);
     setCurrentTab('play');
   };
 
   // Board orientations: top player vs bottom player
   const topColor: Color = isFlipped ? 'w' : 'b';
   const bottomColor: Color = isFlipped ? 'b' : 'w';
+
+  const isTopBot = isBotGame && botColor === topColor;
+  const isBottomBot = isBotGame && botColor === bottomColor;
+
+  const topName = isTopBot ? botProfile?.name || opponent.name : 'You (A. Kasparov)';
+  const topTitle = isTopBot ? (botProfile?.title.split(' ')[0] || 'AI') : 'GM';
+  const topRating = isTopBot ? (botProfile?.elo || opponent.rating) : 2482;
+
+  const bottomName = isBottomBot ? botProfile?.name || opponent.name : 'You (A. Kasparov)';
+  const bottomTitle = isBottomBot ? (botProfile?.title.split(' ')[0] || 'AI') : 'GM';
+  const bottomRating = isBottomBot ? (botProfile?.elo || opponent.rating) : 2482;
 
   const topCaptured = capturedPieces[topColor];
   const bottomCaptured = capturedPieces[bottomColor];
@@ -138,6 +153,8 @@ export const GameScreen: React.FC = () => {
 
   const topTimeFormatted = formatClockTime(topColor === 'w' ? whiteTimeMs : blackTimeMs);
   const bottomTimeFormatted = formatClockTime(bottomColor === 'w' ? whiteTimeMs : blackTimeMs);
+
+  const evalScore = isBotGame && engineEval ? engineEval.scoreCp : materialBalance.diff;
 
   return (
     <div className="flex min-h-screen bg-surface-deep text-on-surface antialiased">
@@ -175,22 +192,24 @@ export const GameScreen: React.FC = () => {
                 <div className="w-full max-w-[760px] mb-space-sm">
                   <PlayerCard
                     color={topColor}
-                    name={topColor === 'b' ? opponent.name : 'You (A. Kasparov)'}
-                    title={topColor === 'b' ? opponent.title : 'GM'}
-                    rating={topColor === 'b' ? opponent.rating : 2482}
+                    name={topName}
+                    title={topTitle}
+                    rating={topRating}
                     isTurn={turn === topColor}
+                    isThinking={isTopBot && isEngineThinking}
+                    isBot={isTopBot}
                     capturedPieces={topCaptured}
                     materialDiff={topMaterialDiff}
                     pieceTheme={pieceTheme}
                     timeRemaining={topTimeFormatted}
-                    latencyMs={opponent.latencyMs}
+                    latencyMs={isTopBot ? 1 : opponent.latencyMs}
                   />
                 </div>
 
                 {/* Main Playing Field: Eval Bar + 8x8 Board Stage */}
                 <div className="w-full max-w-[760px] flex gap-2 items-stretch select-none">
                   {/* Vertical Stockfish Evaluation Bar */}
-                  <EvalBar score={materialBalance.diff} isFlipped={isFlipped} />
+                  <EvalBar score={evalScore} isFlipped={isFlipped} />
 
                   {/* 8x8 Chessboard Stage Container */}
                   <div className="relative flex-1 aspect-square bg-surface-deep p-1.5 rounded-xl shadow-2xl overflow-hidden border border-border-subtle">
@@ -202,15 +221,17 @@ export const GameScreen: React.FC = () => {
                 <div className="w-full max-w-[760px] mt-space-sm">
                   <PlayerCard
                     color={bottomColor}
-                    name={bottomColor === 'w' ? 'You (A. Kasparov)' : opponent.name}
-                    title={bottomColor === 'w' ? 'GM' : opponent.title}
-                    rating={bottomColor === 'w' ? 2482 : opponent.rating}
+                    name={bottomName}
+                    title={bottomTitle}
+                    rating={bottomRating}
                     isTurn={turn === bottomColor}
+                    isThinking={isBottomBot && isEngineThinking}
+                    isBot={isBottomBot}
                     capturedPieces={bottomCaptured}
                     materialDiff={bottomMaterialDiff}
                     pieceTheme={pieceTheme}
                     timeRemaining={bottomTimeFormatted}
-                    latencyMs={18}
+                    latencyMs={isBottomBot ? 1 : 18}
                   />
                 </div>
               </div>

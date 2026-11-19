@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { GameEngine } from '../src/GameEngine';
-import { validateFen } from '../src/fen';
-import { toFigurine, toUci, parseUci } from '../src/notation';
+import { toFigurine, parseUci } from '../src/notation';
 
 describe('Master Regression & Extra Rules Coverage (Target ≥ 150 tests)', () => {
   it('throws an error when initializing with invalid FEN', () => {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DifficultyLevel } from '../engine/stockfishService';
 
 export interface BotProfile {
   id: string;
@@ -12,6 +13,15 @@ export interface BotProfile {
   description: string;
   colorLabel: string;
   engineLevel: number;
+  difficulty: DifficultyLevel;
+}
+
+export function mapBotToDifficulty(bot: BotProfile): DifficultyLevel {
+  if (bot.difficulty) return bot.difficulty;
+  if (bot.engineLevel <= 2) return 'easy';
+  if (bot.engineLevel <= 4) return 'medium';
+  if (bot.engineLevel <= 6) return 'hard';
+  return 'expert';
 }
 
 export const COMPUTER_BOTS: BotProfile[] = [
@@ -25,8 +35,9 @@ export const COMPUTER_BOTS: BotProfile[] = [
     stars: 10,
     quote: 'Every inaccuracy within 40 ply guarantees an asymptotic loss.',
     description: 'Ruthless calculation, impenetrable defense, and algorithmic mastery from move one.',
-    colorLabel: 'SF16 Lvl 8',
+    colorLabel: 'SF19 WASM',
     engineLevel: 8,
+    difficulty: 'expert',
   },
   {
     id: 'tal-ai',
@@ -40,6 +51,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Relentless dynamic sacrifices, chaotic complexities, and tactical fireworks.',
     colorLabel: 'Legend',
     engineLevel: 7,
+    difficulty: 'expert',
   },
   {
     id: 'morphy-ai',
@@ -53,6 +65,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Pure 19th-century romantic chess: king hunts, gambits, and open file assaults.',
     colorLabel: '1858',
     engineLevel: 6,
+    difficulty: 'hard',
   },
   {
     id: 'capablanca-ai',
@@ -66,6 +79,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Crystal-clear positional intuition, prophylactic play, and flawless endgames.',
     colorLabel: 'World Champ',
     engineLevel: 6,
+    difficulty: 'hard',
   },
   {
     id: 'coach-magnus',
@@ -79,6 +93,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Relentless squeezer of microscopic advantages, adapting depth to challenge your current form.',
     colorLabel: 'Coach',
     engineLevel: 5,
+    difficulty: 'medium',
   },
   {
     id: 'sparring-leo',
@@ -92,6 +107,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Standard textbook openings with human-like tactical blind spots and occasional blunders.',
     colorLabel: 'Club',
     engineLevel: 3,
+    difficulty: 'easy',
   },
   {
     id: 'novice-maya',
@@ -105,6 +121,7 @@ export const COMPUTER_BOTS: BotProfile[] = [
     description: 'Playful early attacks, aggressive pawn storms, and generous tactical opportunities.',
     colorLabel: 'Beginner',
     engineLevel: 1,
+    difficulty: 'easy',
   },
 ];
 

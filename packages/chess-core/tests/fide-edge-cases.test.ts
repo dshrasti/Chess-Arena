@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { GameEngine } from '../src/GameEngine';
-import { validateFen } from '../src/fen';
-import { toFigurine, toUci } from '../src/notation';
 
 describe('FIDE Detailed Edge Cases & Invariants', () => {
   // Test all 8 ranks and files pawn start advances

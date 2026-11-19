@@ -19,6 +19,7 @@ export interface SquareProps {
   themeHighlight: string;
   pieceTheme: PieceThemeId;
   isGhost: boolean;
+  isInteractive?: boolean;
   onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
   onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
   onContextMenu?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -41,6 +42,7 @@ export const Square: React.FC<SquareProps> = React.memo(
     themeHighlight,
     pieceTheme,
     isGhost,
+    isInteractive = true,
     onPointerDown,
     onPointerUp,
     onContextMenu,
@@ -54,7 +56,9 @@ export const Square: React.FC<SquareProps> = React.memo(
         onPointerUp={onPointerUp}
         onContextMenu={onContextMenu}
         style={{ backgroundColor: bgColor }}
-        className="relative w-full h-full flex items-center justify-center select-none cursor-pointer overflow-hidden transition-colors duration-100"
+        className={`relative w-full h-full flex items-center justify-center select-none overflow-hidden transition-colors duration-100 ${
+          isInteractive ? 'cursor-pointer' : 'cursor-wait'
+        }`}
         aria-label={`${square} ${piece ? `${piece.color === 'w' ? 'white' : 'black'} ${piece.type}` : 'empty'}`}
       >
         {/* Last Move Overlay */}

@@ -41,7 +41,15 @@ export const Board: React.FC = () => {
     confirmPromotion,
     cancelPromotion,
     isAtLive,
+    isBotGame,
+    botColor,
+    isEngineThinking,
+    status,
   } = useGameStore();
+
+  const isHumanTurn =
+    !isBotGame ||
+    (botColor !== null && turn !== botColor && !isEngineThinking && !status.isGameOver);
 
   const activeTheme = BOARD_THEMES.find((t) => t.id === boardTheme) || BOARD_THEMES[0]!;
 
@@ -81,7 +89,7 @@ export const Board: React.FC = () => {
   const handlePointerDown = (square: ChessSquare, e: React.PointerEvent<HTMLDivElement>) => {
     // Only handle primary left button for moves
     if (e.button === 0) {
-      if (!isAtLive) return;
+      if (!isAtLive || !isHumanTurn) return;
 
       const piece = engine.getPiece(square);
       if (piece && piece.color === turn) {
@@ -105,14 +113,14 @@ export const Board: React.FC = () => {
 
   // Pointer Move handler
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (dragState && e.pointerId === dragState.pointerId) {
+    if (dragState && isHumanTurn && e.pointerId === dragState.pointerId) {
       setDragState((prev) => (prev ? { ...prev, x: e.clientX, y: e.clientY } : null));
     }
   };
 
   // Pointer Up handler
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (dragState && e.pointerId === dragState.pointerId) {
+    if (dragState && isHumanTurn && e.pointerId === dragState.pointerId) {
       const targetSquare = getSquareFromCoords(e.clientX, e.clientY);
       if (targetSquare && targetSquare !== dragState.from) {
         makeMove(dragState.from, targetSquare);
@@ -201,6 +209,7 @@ export const Board: React.FC = () => {
                 themeHighlight={activeTheme.highlight}
                 pieceTheme={pieceTheme}
                 isGhost={isGhost}
+                isInteractive={isHumanTurn}
                 onPointerDown={(e) => handlePointerDown(sq, e)}
                 onPointerUp={handlePointerUp}
               />
